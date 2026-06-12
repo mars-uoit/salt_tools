@@ -1,0 +1,440 @@
+{
+  "configById": {
+    "3D!2xqxf71": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 288.0066533283051,
+        "phi": 30.227754993970127,
+        "thetaOffset": 90.16410814242005,
+        "targetOffset": [
+          -68.05761146861742,
+          -116.99846488110201,
+          2.0720214726114674e-15
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000,
+        "logDepth": false
+      },
+      "followMode": "follow-none",
+      "scene": {
+        "transforms": {
+          "visible": false,
+          "offsetReferenceFrame": "fixed-frame",
+          "labelSize": 0.18,
+          "axisSize": 0.2,
+          "lineWidth": 0,
+          "editable": false
+        },
+        "meshUpAxis": "z_up",
+        "enableStats": false,
+        "syncCamera": true,
+        "backgroundColor": "#000000"
+      },
+      "transforms": {
+        "frame:head": {
+          "visible": false
+        },
+        "frame:back": {
+          "visible": false
+        },
+        "frame:frontleft": {
+          "visible": false
+        },
+        "frame:frontleft_fisheye": {
+          "visible": false
+        },
+        "frame:frontright": {
+          "visible": false
+        },
+        "frame:left": {
+          "visible": false
+        },
+        "frame:left_fisheye": {
+          "visible": false
+        },
+        "frame:right": {
+          "visible": false
+        },
+        "frame:right_fisheye": {
+          "visible": false
+        },
+        "frame:sensor_origin_generated": {
+          "visible": false
+        },
+        "frame:frontright_fisheye": {
+          "visible": false
+        },
+        "frame:body": {
+          "visible": false
+        },
+        "frame:odom": {
+          "visible": false
+        },
+        "frame:vision": {
+          "visible": false
+        },
+        "frame:waypoint_076": {
+          "visible": false
+        },
+        "frame:fiducial_204": {
+          "visible": false
+        },
+        "frame:back_fisheye": {
+          "visible": false
+        },
+        "frame:filtered_fiducial_204": {
+          "visible": false
+        },
+        "frame:waypoint_000": {
+          "visible": false
+        },
+        "frame:waypoint_001": {
+          "visible": false
+        },
+        "frame:waypoint_002": {
+          "visible": false
+        },
+        "frame:waypoint_003": {
+          "visible": false
+        },
+        "frame:waypoint_004": {
+          "visible": false
+        },
+        "frame:waypoint_005": {
+          "visible": false
+        },
+        "frame:waypoint_006": {
+          "visible": false
+        },
+        "frame:waypoint_007": {
+          "visible": false
+        },
+        "frame:waypoint_009": {
+          "visible": false
+        },
+        "frame:local_grids": {
+          "visible": false
+        },
+        "frame:seed": {
+          "visible": true
+        },
+        "frame:waypoint_010": {
+          "visible": false
+        },
+        "frame:waypoint_011": {
+          "visible": false
+        },
+        "frame:waypoint_012": {
+          "visible": false
+        },
+        "frame:waypoint_013": {
+          "visible": false
+        },
+        "frame:waypoint_014": {
+          "visible": false
+        },
+        "frame:waypoint_015": {
+          "visible": false
+        },
+        "frame:waypoint_016": {
+          "visible": false
+        },
+        "frame:waypoint_017": {
+          "visible": false
+        },
+        "frame:waypoint_018": {
+          "visible": false
+        },
+        "frame:waypoint_019": {
+          "visible": false
+        },
+        "frame:waypoint_020": {
+          "visible": false
+        },
+        "frame:waypoint_021": {
+          "visible": false
+        },
+        "frame:waypoint_022": {
+          "visible": false
+        },
+        "frame:waypoint_023": {
+          "visible": false
+        },
+        "frame:waypoint_024": {
+          "visible": false
+        },
+        "frame:waypoint_025": {
+          "visible": false
+        },
+        "frame:waypoint_026": {
+          "visible": false
+        },
+        "frame:waypoint_027": {
+          "visible": false
+        },
+        "frame:waypoint_028": {
+          "visible": false
+        },
+        "frame:waypoint_029": {
+          "visible": false
+        },
+        "frame:waypoint_030": {
+          "visible": false
+        },
+        "frame:waypoint_031": {
+          "visible": false
+        },
+        "frame:waypoint_032": {
+          "visible": false
+        },
+        "frame:waypoint_033": {
+          "visible": false
+        },
+        "frame:waypoint_034": {
+          "visible": false
+        },
+        "frame:waypoint_035": {
+          "visible": false
+        },
+        "frame:base_link": {
+          "visible": true
+        },
+        "frame:body_rot": {
+          "visible": false
+        },
+        "frame:foot_0": {
+          "visible": true
+        },
+        "frame:flat_body": {
+          "visible": false
+        },
+        "frame:hand": {
+          "visible": false
+        },
+        "frame:link_wr1": {
+          "visible": false
+        },
+        "frame:gpe": {
+          "visible": false
+        },
+        "frame:foot_1": {
+          "visible": true
+        },
+        "frame:foot_2": {
+          "visible": true
+        },
+        "frame:foot_3": {
+          "visible": true
+        },
+        "frame:waypoint_036": {
+          "visible": false
+        },
+        "frame:waypoint_037": {
+          "visible": false
+        },
+        "frame:waypoint_038": {
+          "visible": false
+        },
+        "frame:waypoint_039": {
+          "visible": false
+        },
+        "frame:waypoint_040": {
+          "visible": false
+        },
+        "frame:waypoint_041": {
+          "visible": false
+        },
+        "frame:waypoint_042": {
+          "visible": false
+        },
+        "frame:waypoint_043": {
+          "visible": false
+        },
+        "frame:waypoint_044": {
+          "visible": false
+        },
+        "frame:waypoint_045": {
+          "visible": false
+        },
+        "frame:waypoint_046": {
+          "visible": false
+        },
+        "frame:waypoint_047": {
+          "visible": false
+        },
+        "frame:waypoint_048": {
+          "visible": false
+        },
+        "frame:waypoint_049": {
+          "visible": false
+        },
+        "frame:local_grids_corner": {
+          "visible": false
+        },
+        "frame:map_gt": {
+          "visible": false
+        },
+        "frame:map": {
+          "visible": true
+        }
+      },
+      "topics": {
+        "/spot/lidar/point_cloud": {
+          "visible": true,
+          "colorField": "z",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "pointSize": 3,
+          "stixelsEnabled": false,
+          "decayTime": 865.116
+        },
+        "/spot/pointcloud": {
+          "visible": true,
+          "colorField": "z",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "decayTime": 1034.506,
+          "pointSize": 2
+        },
+        "/spot/grids": {
+          "visible": true,
+          "drawBehind": false,
+          "interpolationMethod": "nearestNeighbor",
+          "showLines": false,
+          "lineColor": "#000000",
+          "useLighting": true,
+          "elevationLayer": "terrain",
+          "colorLayer": "obstacle_distance",
+          "colorGradient": [
+            "#ff0000ff",
+            "#ffffff"
+          ],
+          "colorMode": "colorMap",
+          "colorMap": "rainbow",
+          "explicitAlpha": 1
+        },
+        "/spot/fiducial_marker": {
+          "visible": true,
+          "color": "#efefefff",
+          "showOutlines": true
+        },
+        "/spot/tracked_object_markers": {
+          "visible": true,
+          "color": "#f3f0f1ff",
+          "showOutlines": true,
+          "selectedIdVariable": "40"
+        },
+        "/spot/tracked_markers": {
+          "visible": true,
+          "namespaces": {
+            "boxes": {
+              "visible": true
+            },
+            "velocities": {
+              "visible": true
+            }
+          },
+          "showOutlines": false
+        },
+        "/spot/staircase_markers": {
+          "visible": true,
+          "showOutlines": false,
+          "namespaces": {
+            "boxes": {
+              "visible": true
+            }
+          }
+        },
+        "/spot/autowalk_path": {
+          "visible": true
+        },
+        "/spot/path": {
+          "visible": true,
+          "lineWidth": 0.1,
+          "gradient": [
+            "#ff00ee7d",
+            "#ff00eeff"
+          ]
+        },
+        "/spot/apriltags": {
+          "visible": true
+        },
+        "/spot/point_cloud": {
+          "visible": true,
+          "colorField": "z",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "decayTime": 10000,
+          "pointSize": 2
+        },
+        "/ground_truth": {
+          "visible": true,
+          "type": "axis",
+          "arrowScale": [
+            0.563,
+            0.1,
+            0.1
+          ],
+          "axisScale": 0.5
+        }
+      },
+      "layers": {
+        "be22366f-aa8b-479b-be36-a38eb3398052": {
+          "controlMode": "jointStates",
+          "jointStatesTopic": "/spot/joint_states",
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": false,
+          "opacity": 1,
+          "visible": true,
+          "instanceId": "be22366f-aa8b-479b-be36-a38eb3398052",
+          "layerId": "foxglove.Urdf",
+          "label": "URDF",
+          "sourceType": "url",
+          "url": "https://raw.githubusercontent.com/bdaiinstitute/spot_description/refs/heads/main/spot_description/urdf/spot.urdf.xacro",
+          "filePath": "C:\\Users\\chris\\Desktop\\Dataset Stuff\\spot_description\\spot_description\\urdf\\spot.urdf.xacro",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "order": 1
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {},
+      "synchronize": false,
+      "followTf": "base_link",
+      "fixedFrame": "map"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "drawerConfig": {
+    "tracks": []
+  },
+  "layout": "3D!2xqxf71"
+}

@@ -1,0 +1,7 @@
+mcap
+numpy
+open3d
+Pillow
+rosbags
+scipy
+tifffile
