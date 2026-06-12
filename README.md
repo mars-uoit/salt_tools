@@ -4,9 +4,9 @@ Basic tools and conversion scripts to interface with the Spot Autowalk Long-Term
 
 ## Abstract
 
-The SALT Dataset was collected performing repeated Autowalks with a Boston Dynamics Spot robot across three different scenarios including both indoor and outdoor environments. The main contribution is 217 traversals of an outdoor Autowalk around the Ontario Tech University campus over a 16 month period. In total the dataset contains 286 traversals and 194 km of walking over a period of nearly two years. The data is presented in multiple formats for ease of use including: native format, a human readable format, a KITTI Odometry format including pseudo ground truth poses, and an MCAP format for use with ROS2. This dataset aims to enable researchers to develop new algorithms for long-term mapping applications.
+The SALT Dataset was collected by performing repeated Autowalks with a Boston Dynamics Spot robot across three different scenarios including both indoor and outdoor environments. The main contribution is 217 traversals of an outdoor Autowalk around the Ontario Tech University campus over a 16 month period. In total, the dataset contains 286 traversals and 194 km of walking over a period of nearly two years. The data is presented in multiple formats for ease of use including: native format, a human readable format, a KITTI Odometry format including pseudo ground truth poses, and an MCAP format for use with ROS2. This dataset aims to enable researchers to develop new algorithms for long-term mapping applications.
 
-A compilation video of one year of outdoor runs is available [Watch on YouTube](https://www.youtube.com/watch?v=Nof6R7y4wDE).
+A compilation video of one year of outdoor runs is available here: [Watch on YouTube](https://www.youtube.com/watch?v=Nof6R7y4wDE).
 
 ## Setup
 
@@ -20,7 +20,7 @@ python -m pip install -r requirements.txt
 
 ### Visualization
 
-For quick visualization a Foxglove layout (salt_foxglove_layout.json) is included. You can import this layout into Foxglove to instantly visualize the generated .mcap files including point clouds, elevation and occupancy girds, TF trees, battery conditions, and joint tracking for the [Spot URDF](https://github.com/rai-opensource/spot_description).
+For quick visualization, a Foxglove layout (salt_foxglove_layout.json) is included. You can import this layout into Foxglove to instantly visualize the generated .mcap files, including point clouds, elevation and occupancy grids, TF trees, battery conditions, and joint tracking for the [Spot URDF](https://github.com/rai-opensource/spot_description).
 
 ### Dataset Management
 
@@ -29,7 +29,7 @@ For quick visualization a Foxglove layout (salt_foxglove_layout.json) is include
   ```
   python scripts/unzip_dataset.py --zip_dir /path/to/zips --extract_to /path/to/dataset
   ```
-* **verify_dataset.py -** Validates the extracted dataset's file counts, missing directories, and file structure against the metadata.json files. The script can be customized to only check certain datatypes or scenarios.
+* **verify_dataset.py -** Validates the extracted dataset's file counts, missing directories, and file structure against the metadata.json files. The script can be customized to only check certain data types or scenarios.
 
   ```
   python scripts/verify_dataset.py --base_dir /path/to/spot_autowalk_long_term_dataset
@@ -37,9 +37,9 @@ For quick visualization a Foxglove layout (salt_foxglove_layout.json) is include
 
 ## Data Conversion
 
-The natively recorded data is the localization response files and the Autowalk files. Separate data types for the same data is provided in SALT for ease of use. The scripts used to convert the data are available here to allow users to customize the data if needed.
+The natively recorded data is the localization response files and the Autowalk files. Separate data types for the same data are provided in SALT for ease of use. The scripts used to convert the data are available here to allow users to customize the data if needed.
 
-* **run_to_expanded_data.py -** Extracts the point clouds (.ply) and local grids (.tif/.png) from the localization response run folder into a more human readable format.
+* **run_to_expanded_data.py -** Extracts the point clouds (.ply) and local grids (.tif/.png) from the localization response run folder into a more human-readable format.
 
   ```
   python scripts/run_to_expanded_data.py --run_dir /path/to/localization_response/run_XXX --out_dir /path/to/output
@@ -49,7 +49,7 @@ The natively recorded data is the localization response files and the Autowalk f
   ```
   python scripts/run_to_kitti.py --run_dir /path/to/localization_response/run_XXX --out_dir /path/to/output --gt_map /path/to/autowalk/pseudo_gt/cloud.ply --poses /path/autowalk/pseudo_gt/poses/00.txt  --debug --extended
   ```
-* **run_to_mcap.py -** Converts as much data from a localization response run to MCAP ROS2 Humble format as possible with standard message types. The script was written without the need for a ROS2 installation allowing easier use for people not using ROS2. A KITTI poses.txt file can be provided to add a ground truth pose. MCAP files can be visualized quickly in Foxglove using the salt_foxglove_layout.json.
+* **run_to_mcap.py -** Converts as much data from a localization response run to MCAP ROS2 Humble format as possible with standard message types. The script was written without the need for a ROS2 installation, allowing easier use for people not using ROS2. A KITTI poses.txt file can be provided to add a ground truth pose. MCAP files can be visualized quickly in Foxglove using the salt_foxglove_layout.json.
 
   ```
   python scripts/run_to_mcap.py --run_dir /path/to/localization_response/run_XXX --out_dir /path/to/output --kitti_poses /path/to/kitti/poses/XXX.txt
