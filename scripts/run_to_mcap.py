@@ -117,10 +117,14 @@ CHANNEL_CONFIG = {
 }
 
 
-def run_to_mcap(run_dir: Path, out_dir: Path, kitti_pose_path: Path):
+def run_to_mcap(run_dir: Path, output: Path, kitti_pose_path: Path):
     spot_path_list = []
 
-    mcap_file_path = out_dir / (run_dir.name + ".mcap")
+    if output.is_dir():
+        mcap_file_path = output / f"{run_dir.name}.mcap"
+    else:
+        mcap_file_path = output if output.name.endswith(".mcap") else output.with_name(f"{output.name}.mcap")
+        mcap_file_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(mcap_file_path, "wb") as f:
         writer = Writer(f)
@@ -129,20 +133,29 @@ def run_to_mcap(run_dir: Path, out_dir: Path, kitti_pose_path: Path):
         channels = register_channels(writer)
 
         # open the first waypoint localization response json
-        loc_files = sorted(run_dir.iterdir())
+        loc_files = sorted(run_dir.glob("*.json"))
 
         if not loc_files:
-            logging.error(f"No localization response files found in {run_dir}")
+            logging.error(f"No JSON localization response files found in {run_dir}")
             return
 
-        first_loc_resp_path = loc_files[0]
+        first_loc_resp = None
+        for loc_file in loc_files:
+            try:
+                with open(loc_file, "r", encoding="utf-8") as file:
+                    resp = json.load(file)
+                # check if it has the required fields for initialization
+                _ = resp["localization"]["seedTformBody"]
+                _ = resp["liveData"]["robotState"]["kinematicState"]["transformsSnapshot"]["childToParentEdgeMap"]
+                _ = resp["localization"]["timestamp"]
+                first_loc_resp = resp
+                break
+            except Exception as e:
+                logging.warning(f"Skipping initialization from {loc_file.name} due to missing fields/invalid JSON: {e}")
 
-        with open(
-            first_loc_resp_path,
-            "r",
-            encoding="utf-8",
-        ) as file:
-            first_loc_resp = json.load(file)
+        if not first_loc_resp:
+            logging.error("Could not find any valid localization response files to initialize transforms.")
+            return
 
         # starting transforms from the seed (map) to vision
         loc_dict = first_loc_resp["localization"]["seedTformBody"]
@@ -209,7 +222,10 @@ def run_to_mcap(run_dir: Path, out_dir: Path, kitti_pose_path: Path):
             ) as file:
                 loc_resp = json.load(file)
 
-            process_localization_file(loc_resp, writer, channels, spot_path_list)
+            try:
+                process_localization_file(loc_resp, writer, channels, spot_path_list)
+            except Exception as e:
+                logging.warning(f"Skipping {localization_response_path.name} due to missing fields: {e}")
 
         writer.finish()
 
@@ -648,7 +664,7 @@ def create_marker_objects_msg(object_dict, timestamp):
         z=tf_snap["position"]["z"],
     )
 
-    rotation = Quaternion(x=0.0, y=0.0, z=0.0, w=0.0)
+    rotation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
 
     pose = Pose(position=position, orientation=rotation)
 
@@ -1076,13 +1092,14 @@ if __name__ == "__main__":
         help="Path to the localization response run folder",
     )
     parser.add_argument(
-        "--out_dir",
+        "--output",
+        "-o",
         type=Path,
         required=True,
-        help="Path to the output folder for mcap files",
+        help="Output MCAP file path or existing directory",
     )
     parser.add_argument(
-        "--kitti_pose",
+        "--kitti_poses",
         type=Path,
         required=False,
         help="The route to the kitti pose.txt file for ground truth poses",
@@ -1090,4 +1107,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run_to_mcap(args.run_dir, args.out_dir, args.kitti_pose)
+    run_to_mcap(args.run_dir, args.output, args.kitti_poses)

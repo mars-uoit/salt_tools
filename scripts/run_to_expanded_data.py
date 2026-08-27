@@ -23,34 +23,38 @@ def run_to_expanded_data(run_dir: Path, out_dir):
     for file_path in run_dir.glob("*.json"):
         waypoint_num = file_path.stem
 
-        # open json
-        with file_path.open("r") as f:
-            data = json.load(f)
+        try:
+            # open json
+            with file_path.open("r") as f:
+                data = json.load(f)
 
-        live_data = data.get("liveData", {})
+            live_data = data.get("liveData", {})
 
-        # point clouds
-        if "pointCloud" in live_data:
-            pcd_array = unpack_point_cloud(live_data["pointCloud"])
-            pcd = o3d.geometry.PointCloud()
-            pcd.points = o3d.utility.Vector3dVector(pcd_array)
-            o3d.io.write_point_cloud(str(pc_folder / f"{waypoint_num}.ply"), pcd)
+            # point clouds
+            if "pointCloud" in live_data:
+                pcd_array = unpack_point_cloud(live_data["pointCloud"])
+                pcd = o3d.geometry.PointCloud()
+                pcd.points = o3d.utility.Vector3dVector(pcd_array)
+                o3d.io.write_point_cloud(str(pc_folder / f"{waypoint_num}.ply"), pcd)
 
-        # grids
-        if "robotLocalGrids" in live_data:
-            for grid in live_data["robotLocalGrids"]:
-                grid_type = grid["localGridTypeName"]
-                grid_type_folder = grids_folder / grid_type
-                grid_type_folder.mkdir(parents=True, exist_ok=True)
+            # grids
+            if "robotLocalGrids" in live_data:
+                for grid in live_data["robotLocalGrids"]:
+                    grid_type = grid["localGridTypeName"]
+                    grid_type_folder = grids_folder / grid_type
+                    grid_type_folder.mkdir(parents=True, exist_ok=True)
 
-                grid_array = unpack_grid(grid)
-                ext = ".png" if grid["cellFormat"] == "CELL_FORMAT_UINT8" else ".tif"
-                output_path = str(grid_type_folder / f"{waypoint_num}{ext}")
+                    grid_array = unpack_grid(grid)
+                    ext = ".png" if grid["cellFormat"] == "CELL_FORMAT_UINT8" else ".tif"
+                    output_path = str(grid_type_folder / f"{waypoint_num}{ext}")
 
-                if ext == ".png":
-                    Image.fromarray(grid_array).save(output_path)
-                else:
-                    tifffile.imwrite(output_path, grid_array)
+                    if ext == ".png":
+                        Image.fromarray(grid_array).save(output_path)
+                    else:
+                        tifffile.imwrite(output_path, grid_array)
+        except Exception as e:
+            print(f"Skipping {file_path.name} due to missing fields/error: {e}")
+            continue
 
 
 if __name__ == "__main__":

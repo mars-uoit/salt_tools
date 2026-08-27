@@ -19,9 +19,23 @@ def kitti_extended(run_dir: Path, out_dir: Path):
         print(f"No JSON files found in {run_dir}")
         return
 
-    # open first json
-    with open(json_files[0], "r", encoding="utf-8") as f:
-        data = json.load(f)
+    first_loc_resp = None
+    for loc_file in json_files:
+        try:
+            with open(loc_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            _ = data["localization"]["seedTformBody"]
+            _ = data["liveData"]["pointCloud"]["source"]["transformsSnapshot"]["childToParentEdgeMap"]
+            first_loc_resp = data
+            break
+        except Exception as e:
+            print(f"Skipping initialization from {loc_file.name} due to missing fields: {e}")
+
+    if not first_loc_resp:
+        print("Could not find any valid localization response files to initialize transforms.")
+        return
+
+    data = first_loc_resp
 
     # get initial seed to body offsets
     seed_tf_body0 = tfdict_to_tfmatrix(data["localization"]["seedTformBody"])
@@ -56,16 +70,20 @@ def kitti_extended(run_dir: Path, out_dir: Path):
     ) as of:
 
         for file in json_files:
-            with open(file, "r", encoding="utf-8") as f:
-                data = json.load(f)
+            try:
+                with open(file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
 
-            edges = data["liveData"]["pointCloud"]["source"]["transformsSnapshot"][
-                "childToParentEdgeMap"
-            ]
+                edges = data["liveData"]["pointCloud"]["source"]["transformsSnapshot"][
+                    "childToParentEdgeMap"
+                ]
 
-            # get body to frame
-            T_body_odom = tfdict_to_tfmatrix(edges["odom"])
-            T_body_vision = tfdict_to_tfmatrix(edges["vision"])
+                # get body to frame
+                T_body_odom = tfdict_to_tfmatrix(edges["odom"])
+                T_body_vision = tfdict_to_tfmatrix(edges["vision"])
+            except Exception as e:
+                print(f"Skipping {file.name} due to missing fields: {e}")
+                continue
 
             # invert tfs
             odom_tf_body = np.linalg.inv(T_body_odom)
@@ -157,15 +175,28 @@ def run_to_kitti(
         ]
 
     # loop through waypoints
-    for i, json_file in enumerate(json_files):
+    valid_count = 0
+    for json_file in json_files:
         target_idx = int(json_file.stem)
 
         # open localization response
-        with open(json_file, "r", encoding="utf-8") as file:
-            loc_dict = json.load(file)
+        try:
+            with open(json_file, "r", encoding="utf-8") as file:
+                loc_dict = json.load(file)
 
-        # open point cloud
-        pc_data = unpack_point_cloud(loc_dict["liveData"]["pointCloud"])
+            # open point cloud
+            pc_data = unpack_point_cloud(loc_dict["liveData"]["pointCloud"])
+            
+            # extract transforms mapping
+            vis_dict = loc_dict["liveData"]["pointCloud"]["source"]["transformsSnapshot"][
+                "childToParentEdgeMap"
+            ]["vision"]
+            
+            iso_str = loc_dict["liveData"]["pointCloud"]["source"]["acquisitionTime"]
+        except Exception as e:
+            print(f"Skipping {json_file.name} due to missing fields: {e}")
+            continue
+
         valid_mask = np.isfinite(pc_data[:, :3]).all(axis=1)
         clean_points = pc_data[valid_mask, :3]
 
@@ -175,17 +206,14 @@ def run_to_kitti(
         # recolour the cloud to see them being added better
         if debug:
             frame_pc.colors = o3d.utility.Vector3dVector()
-            frame_pc.paint_uniform_color(palette[i % len(palette)])
+            frame_pc.paint_uniform_color(palette[valid_count % len(palette)])
 
-        vis_dict = loc_dict["liveData"]["pointCloud"]["source"]["transformsSnapshot"][
-            "childToParentEdgeMap"
-        ]["vision"]
         vis_mat = tfdict_to_tfmatrix(vis_dict)
         vis_pose = np.linalg.inv(vis_mat)
 
         # determine initial pose guess
         # reset to GT if it's the first frame OR if the waypoint gap > 30
-        if i == 0 or (
+        if valid_count == 0 or (
             prev_target_idx is not None and (target_idx - prev_target_idx) > 30
         ):
             kitti_base = np.eye(4)
@@ -269,7 +297,7 @@ def run_to_kitti(
         if debug:
             merged_cloud += frame_pc
             if (
-                i == 0 or (target_idx - prev_target_idx) > 30
+                valid_count == 0 or (target_idx - prev_target_idx) > 30
             ):  # Reset bounding box on jump
                 vis.add_geometry(frame_pc, reset_bounding_box=True)
             else:
@@ -281,7 +309,6 @@ def run_to_kitti(
         f_poses.write(" ".join([f"{x:.6e}" for x in pose_row]) + "\n")
 
         # write times
-        iso_str = loc_dict["liveData"]["pointCloud"]["source"]["acquisitionTime"]
         time_sec = iso_to_nanoseconds(iso_str) / 1e9
 
         f_times.write(f"{time_sec:.6f}\n")
@@ -295,14 +322,16 @@ def run_to_kitti(
                 (valid_points[:, :3], np.zeros((len(valid_points), 1)))
             ).astype(np.float32)
 
-        bin_data.tofile(str(velo_dir / f"{i:06d}.bin"))
+        bin_data.tofile(str(velo_dir / f"{valid_count:06d}.bin"))
 
         # visualize
         if debug:
             vis.poll_events()
             vis.update_renderer()
-            if i % 10 == 0:
+            if valid_count % 10 == 0:
                 merged_cloud = merged_cloud.voxel_down_sample(voxel_size=0.1)
+
+        valid_count += 1
 
     f_poses.close()
     f_times.close()
